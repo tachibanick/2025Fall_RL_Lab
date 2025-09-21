@@ -43,12 +43,14 @@ python train.py --algo {algorithm} [--map_size SIZE] [--save_name]
 - --save_name (str): Filename to save the policy.
 
 **Parameter Arguments**
+
 You can adjust the parameters for training with additional arguments
 - --gamma (float): Gamma values. Default is 0.95
 - --max_iteration (int): Max iteration number. Default is 80.
 - --theta (float): Theta values. Default is 1e-3.
 
 **Save**
+
 The trained policy will be saved as `checkpoints/policy_{args.algo}_{args.save_name}.pkl`.
 
 The visualization of the value function and policy for each iteration are saved in `output/{args.algo}_{args.save_name}/` folder. In this visualization, 
