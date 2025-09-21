@@ -8,7 +8,7 @@ This repository contains lab session materials (code) for the SNU Reinforcement 
 
 ```bash
 # clone the repository
-git clone https://github.com/SNU-IntelligentMotionLab/SNU_RL_2025Fall.git
+git clone https://github.com/SNU-IntelligentMotionLab/2025Fall_RL_Lab.git
 
 # create and activate a virtual environment
 python3 -m venv lab_env
