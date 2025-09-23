@@ -3,6 +3,8 @@
 This repository contains lab session materials (code) for the SNU Reinforcement Learning course, 2025 Fall.
 
 ---
+## Materials
+Download slides from here: [Google Drive Link](https://drive.google.com/drive/folders/1MszHErtjOB1yrbHIbXdS5S410WMdZMG4?usp=drive_link)
 
 ## 🛠️ Installation
 
