@@ -4,3 +4,7 @@ __pycache__/
 *.pyc
 checkpoints
 outputs
+lab_env/
+.lab_env/
+lab_env/
+

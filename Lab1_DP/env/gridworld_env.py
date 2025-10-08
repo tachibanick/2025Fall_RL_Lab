@@ -6,12 +6,14 @@ from enum import Enum
 from PIL import Image
 import json
 
+
 # define tile type
 class TileType(Enum):
     NORMAL = 0
     WALL = 1
     TRAP = 2
     GOAL = 3
+
 
 # define action
 class Action(Enum):
@@ -20,9 +22,10 @@ class Action(Enum):
     LEFT = 2
     RIGHT = 3
 
+
 # load map json
 def load_map_from_file(file_name):
-    file_path = 'env/maps/' + file_name
+    file_path = "env/maps/" + file_name
     print(file_path)
     with open(file_path, "r") as f:
         data = json.load(f)
@@ -40,6 +43,7 @@ def load_map_from_file(file_name):
 
     return width, height, grid
 
+
 class GridWorldEnv:
     def __init__(self, width=6, height=6, cell_size=64, map_file=None):
         if map_file:
@@ -51,12 +55,14 @@ class GridWorldEnv:
 
         self.width = width
         self.height = height
-        self.agent_pos = [3, 0] # initial state
+        self.agent_pos = [3, 0]  # initial state
         self.done = False
         self.cell_size = cell_size
 
         pygame.init()
-        self.screen = pygame.display.set_mode((self.width * cell_size, self.height * cell_size))
+        self.screen = pygame.display.set_mode(
+            (self.width * cell_size, self.height * cell_size)
+        )
         pygame.display.set_caption("GridWorld-d")
 
         self.tileset = pygame.image.load("assets/tileset.png").convert_alpha()
@@ -72,13 +78,16 @@ class GridWorldEnv:
     def _load_tile_images(self):
         def tile(x, y):
             TILE_SIZE = 16
-            surface = self.tileset.subsurface(pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
+            surface = self.tileset.subsurface(
+                pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE)
+            )
             return pygame.transform.scale(surface, (self.cell_size, self.cell_size))
+
         self.images = {
             TileType.NORMAL: tile(4, 8),
             TileType.WALL: tile(11, 12),
             TileType.TRAP: tile(3, 13),
-            TileType.GOAL: tile(2, 12)
+            TileType.GOAL: tile(2, 12),
         }
 
     def _load_agent_gif(self, gif_path):
@@ -97,18 +106,18 @@ class GridWorldEnv:
             if i == gif.n_frames:
                 break
 
-    def _place_special_tiles(self): 
+    def _place_special_tiles(self):
         # random.seed(40)
         num_walls = (self.width * self.height) // 5
         num_traps = (self.width * self.height) // 10
         positions = [(i, j) for i in range(self.height) for j in range(self.width)]
-        
+
         # remove initial and goal state
         positions.remove((0, 0))
         goal_pos = (self.height - 1, self.width - 1)
         if goal_pos in positions:
             positions.remove(goal_pos)
-        
+
         random.shuffle(positions)
 
         for _ in range(num_walls):
@@ -128,15 +137,19 @@ class GridWorldEnv:
         return self.agent_pos
 
     # return pos, reward, done after action
-    def step(self, action):
+    def step(self, action, stochastic=True):
         if self.done:
             return self.agent_pos, 0, self.done
+
+        if stochastic and random.random() < 0.1:
+            action = random.randint(0, 3)
+            print(f"Random action taken!!!: {action}")
 
         move = {
             Action.UP: (-1, 0),
             Action.DOWN: (1, 0),
             Action.LEFT: (0, -1),
-            Action.RIGHT: (0, 1)
+            Action.RIGHT: (0, 1),
         }[Action(action)]
 
         new_pos = [self.agent_pos[0] + move[0], self.agent_pos[1] + move[1]]
@@ -154,7 +167,7 @@ class GridWorldEnv:
             reward = 100
             self.done = True
         return self.agent_pos, reward, self.done
-    
+
     # rendering
     def render(self):
         for event in pygame.event.get():
@@ -164,15 +177,25 @@ class GridWorldEnv:
         for y in range(self.height):
             for x in range(self.width):
                 tile = self.grid[y][x]
-                self.screen.blit(self.images[TileType.NORMAL], (x * self.cell_size, y * self.cell_size))
+                self.screen.blit(
+                    self.images[TileType.NORMAL],
+                    (x * self.cell_size, y * self.cell_size),
+                )
                 if tile != TileType.NORMAL:
-                    self.screen.blit(self.images[tile], (x * self.cell_size, y * self.cell_size))
+                    self.screen.blit(
+                        self.images[tile], (x * self.cell_size, y * self.cell_size)
+                    )
 
         self.frame_counter += 1
         if self.frame_counter % 10 == 0:
-            self.current_agent_frame = (self.current_agent_frame + 1) % len(self.agent_frames)
+            self.current_agent_frame = (self.current_agent_frame + 1) % len(
+                self.agent_frames
+            )
 
         x, y = self.agent_pos[1], self.agent_pos[0]
-        self.screen.blit(self.agent_frames[self.current_agent_frame], (x * self.cell_size, y * self.cell_size))
+        self.screen.blit(
+            self.agent_frames[self.current_agent_frame],
+            (x * self.cell_size, y * self.cell_size),
+        )
 
         pygame.display.flip()
