@@ -81,12 +81,12 @@ python render.py --policy policy_q_learning_test.pkl --map_size 10
 
 For model-free prediction, the plot would be saved as `/outputs/mf_pred_{args.save_name}/bias_variance_comparison.png` as like the following example:
 
-![ex](assets/example_result_imgs/bias_variance_comparison.png){: height=500}
+![ex](assets/example_result_imgs/bias_variance_comparison.png)
 
 After running the training script for SARSA and Q-Learning, plot for value function and policy would be saved in `/outputs/mf_pred_{args.save_name}/iteration_{iteration_num}.png` as like the following example:
 
-![ex](assets/example_result_imgs/iteration_999.png){: height=400}
+![ex](assets/example_result_imgs/iteration_999.png)
 
 After running the rendering script for SARSA and Q-Learning, a window with the following visualization would appear:
 
-![ex](assets/example_result_imgs/render.png){: width="50%" height="50%"}
+![ex](assets/example_result_imgs/render.png)
