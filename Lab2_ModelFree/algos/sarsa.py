@@ -23,7 +23,6 @@ def sarsa(env, save_name, episodes=1000, alpha=0.1, gamma=0.99, epsilon=1.0, ren
     for episode in tqdm(range(episodes), desc="Training SARSA"):
         # Decrease epsilon every episode
         epsilon = max(min_epsilon, initial_epsilon * (decay_rate ** episode))
-
         state = tuple(env.reset())
 
         # Select action using epsilon-greedy

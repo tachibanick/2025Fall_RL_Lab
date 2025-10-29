@@ -38,8 +38,13 @@ You can adjust the parameters for training with additional arguments
 For **model-free prediction** experiment, the mean and variance plot for Monte-Carlo and TD(0) would be saved in
 `outputs/mf_pred_{args.save_name}/bias_variance_comparison.png`.
 
-For **SARSA and Q-Learning**, the trained policy will be saved as `checkpoints/policy_{args.algo}_{args.save_name}.pkl`, and the value and policy plot would be saved in `outputs/{args.alog}_{args.save_name}/iteration_{iter_num}.png`.
+For **SARSA and Q-Learning**, the trained policy will be saved as `checkpoints/policy_{args.algo}_{args.save_name}.pkl`.
 
+The visualization of the value function and policy for each iteration are saved in `outputs/{args.algo}_{args.save_name}/` folder. In this visualization, 
+  - Red: Trap
+  - Black: Wall
+  - Green: Goal 
+  - White: Normal
 ---
 
 ### Rendering a Trained Policy

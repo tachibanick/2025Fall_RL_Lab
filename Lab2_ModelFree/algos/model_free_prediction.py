@@ -40,7 +40,6 @@ def monte_carlo_prediction(env, policy, episodes=1000, gamma=0.99,
     for _ in range(episodes):
         state = tuple(env.reset())
         episode = []
-
         done = False
 
         # Store (state, reward) tuples within one episode
@@ -60,13 +59,11 @@ def monte_carlo_prediction(env, policy, episodes=1000, gamma=0.99,
             
             # Every-visit / or first time visit when first_visit is True
             if not first_visit or s_t not in visited:
-                
                 if use_incremental_mean:
                     # update V by adjusting the difference between existing V value and G with learning rate α
                     counts[s_t] += 1
                     alpha = 1 / counts[s_t]
                     V[s_t] += alpha * (G - V[s_t])
-                
                 else:  # store all G values, then update V by calculating the average
                     returns[s_t].append(G)
                     V[s_t] = sum(returns[s_t]) / len(returns[s_t])  # Average of returns per state
