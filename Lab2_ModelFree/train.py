@@ -58,7 +58,7 @@ def main():
             'q_learning': q_learning,
         }
         if args.algo not in mfc_algo_func_dict:
-            raise NotImplementedError(f"Algo should be either mf_pred, mc, sarsa, and q_learning. Current one: {args.algo}")
+            raise NotImplementedError(f"Algo should be either mf_pred, sarsa, and q_learning. Current one: {args.algo}")
         
         kwargs = {
             "save_name": args.save_name,
