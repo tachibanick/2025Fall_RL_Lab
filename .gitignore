@@ -8,3 +8,5 @@ lab_env/
 .lab_env/
 lab_env/
 
+*.pkl
+outputs/
