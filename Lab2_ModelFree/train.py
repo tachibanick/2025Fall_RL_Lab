@@ -17,7 +17,7 @@ def main():
     parser.add_argument('--algo', type=str, required=True,
                         choices=["mf_pred", "mc", "sarsa", "q_learning"],
                         help="Choose algorithm: mf_pred for model free prediction, or mc, sarsa, q_learning for control.")
-    parser.add_argument('--map_size', type=int, default=6)
+    parser.add_argument('--map_name', type=str, default="map_cliff.json")
     parser.add_argument('--save_name', type=str, default=None,
                         help="Filename of saving policy to pkl file")
     parser.add_argument('--render', action='store_true', help="Render environment during training")
@@ -31,11 +31,12 @@ def main():
     # parameters
     parser.add_argument('--gamma', type=float, default=0.99, help="Gamma value")
     parser.add_argument('--alpha', type=float, default=0.1, help="Alpha value")
+    parser.add_argument('--epsilon', type=float, default=1.0, help="Epsilon value for epsilon-greedy")
 
     args = parser.parse_args()
 
-    map_name = f"map_{args.map_size}.json"
-    env = GridWorldEnv(width=args.map_size, height=args.map_size, map_file=map_name)
+    map_name = f"map_{args.map_name}.json"
+    env = GridWorldEnv(map_file=map_name)
 
     print(f"=== Running {args.algo.upper()} ===")
     
@@ -66,6 +67,7 @@ def main():
             "gamma": args.gamma,
             "alpha": args.alpha,
             "render": args.render,
+            "epsilon": args.epsilon,
         }
         algo_func = mfc_algo_func_dict[args.algo]
         _, pi = algo_func(env, **kwargs)

@@ -30,6 +30,10 @@ def load_map_from_file(file_name):
     width = data["width"]
     height = data["height"]
     grid = np.full((height, width), TileType.NORMAL)
+    if data["start"]:
+        startpos = data["start"]
+    else:
+        startpos = [3,0]
 
     for y, x in data.get("walls", []):
         grid[y][x] = TileType.WALL
@@ -38,20 +42,21 @@ def load_map_from_file(file_name):
     goal_y, goal_x = data["goal"]
     grid[goal_y][goal_x] = TileType.GOAL
 
-    return width, height, grid
+    return width, height, grid, startpos
 
 class GridWorldEnv:
     def __init__(self, width=6, height=6, cell_size=64, map_file=None):
         if map_file:
-            width, height, self.grid = load_map_from_file(map_file)
+            width, height, self.grid, startpos = load_map_from_file(map_file)
         else:
             width = max(5, min(width, 15))
             height = max(5, min(height, 15))
             self.grid = np.full((height, width), TileType.NORMAL)
 
         self.width = width
+        self.startpos = startpos
         self.height = height
-        self.agent_pos = [3, 0] # initial state
+        self.agent_pos = startpos # initial state
         self.done = False
         self.cell_size = cell_size
 
@@ -123,7 +128,7 @@ class GridWorldEnv:
 
     # reset
     def reset(self):
-        self.agent_pos = [0, 0]
+        self.agent_pos = self.startpos
         self.done = False
         return self.agent_pos
 

@@ -13,15 +13,15 @@ def load_policy(path):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--policy', type=str, required=False, help="Path to policy .pkl file")
-    parser.add_argument('--map_size', type=int, default=6)
+    parser.add_argument('--map_name', type=str, default="cliff")
     parser.add_argument('--random', action='store_true', help="Use randomly generated map")
     args = parser.parse_args()
 
     map_name = None
     if not args.random:
-        map_name = f"map_{args.map_size}.json"
+        map_name = f"map_{args.map_name}.json"
 
-    env = GridWorldEnv(width=args.map_size, height=args.map_size, map_file=map_name)
+    env = GridWorldEnv(map_file=map_name)
     
     policy = None
     if args.policy:
@@ -40,6 +40,7 @@ def main():
         state, _, done = env.step(action.value)
         env.render()
         time.sleep(0.25)
+        print(f"State: {state}, Action: {action}, Done: {done}")
         if done:
             time.sleep(1.0)
             state = env.reset()

@@ -16,7 +16,7 @@ def q_learning(env, save_name, episodes=1000, alpha=0.1, gamma=0.99, epsilon=1.0
     max_steps = 500
 
     # epsilon decay settings
-    initial_epsilon = 1.0
+    initial_epsilon = epsilon
     min_epsilon = 0.05
     decay_rate = 0.99
 
@@ -72,11 +72,20 @@ def q_learning(env, save_name, episodes=1000, alpha=0.1, gamma=0.99, epsilon=1.0
 
     policy = {state: max(actions, key=actions.get) for state, actions in Q.items()}
 
+    #plot rewards
+    smoothing = True
+    smoothed_rewards = []
+    window_size = 10
+    if smoothing:
+        for i in range(len(reward_history)):
+            start_idx = max(0, i - window_size + 1)
+            smoothed_rewards.append(sum(reward_history[start_idx:i+1]) / (i - start_idx + 1))
+        reward_history = smoothed_rewards
     plt.figure()
-    plt.plot(reward_history)
+    plt.plot(smoothed_rewards if smoothing else reward_history)
     plt.xlabel('Episode')
     plt.ylabel('Total Reward')
-    plt.title('Q-Learning - Episode Rewards')
+    plt.title('Q-Learning - Episode Rewards, init_epsilon = {:.2f}'.format(initial_epsilon))
     plt.grid(True)
     plt.savefig(os.path.join(output_folder, 'q_learning_rewards.png'))
     plt.close()

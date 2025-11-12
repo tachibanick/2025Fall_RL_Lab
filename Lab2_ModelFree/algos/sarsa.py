@@ -2,6 +2,7 @@ import random
 from collections import defaultdict
 from env.gridworld_env import Action
 import time
+import os
 from tqdm import tqdm  
 from algos.utils import plot_value_and_policy
 import matplotlib.pyplot as plt
@@ -78,5 +79,26 @@ def sarsa(env, save_name, episodes=1000, alpha=0.1, gamma=0.99, epsilon=1.0, ren
 
     # Return final policy
     policy = {state: max(actions, key=actions.get) for state, actions in Q.items()}
+
+    # plot rewards
+
+    #avg rewards, smoother curve
+    smoothing = True
+    window_size = 10
+    smoothed_rewards = []
+    for i in range(len(all_rewards)):
+        start_index = max(0, i - window_size + 1)
+        window = all_rewards[start_index:i + 1]
+        smoothed_rewards.append(sum(window) / len(window))
+    
+    plt.figure()
+    plt.plot(smoothed_rewards if smoothing else all_rewards)
+    plt.xlabel('Episode')
+    plt.ylabel('Total Reward')
+    plt.title('SARSA - Episode Rewards. init_epsilon = {:.2f}'.format(initial_epsilon))
+    plt.grid(True)
+    plt.savefig(os.path.join(output_folder, 'sarsa_rewards.png'))
+    plt.close()
+
 
     return Q, policy
